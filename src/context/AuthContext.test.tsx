@@ -2,36 +2,47 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { AuthContext, AuthProvider } from "./AuthContext";
 
-describe("login test (AuthContext)", () => {
-  it("sets isLoggedIn status to true", () => {
+describe("login & logout test (AuthContext)", () => {
+  it("sets isLoggedIn status to true and then to false", () => {
     const TestComponent = () => {
-      const { login, isLoggedIn } = React.useContext(AuthContext);
+      const { login, logout, isLoggedIn } = React.useContext(AuthContext);
 
       return (
         <>
           <p data-testid="value">{isLoggedIn.toString()}</p>
-          <button data-testid="loginBtn" onClick={login}>Login</button>
+          <button data-testid="loginBtn" onClick={login}>
+            Login
+          </button>
+          <button data-testid="logoutBtn" onClick={logout}>
+            Logout
+          </button>
         </>
       );
     };
 
-    const { container, unmount } = render(
+    const container = render(
       <AuthProvider>
         <TestComponent />
       </AuthProvider>
     );
 
-    const divBeforeClick = container.querySelector("p[data-testid='value']");
-    if (divBeforeClick !== null)
-      expect(divBeforeClick.textContent).toEqual("false");
+    // getting state of login
+    const div = container.getByTestId("value");
+    if (div !== null) expect(div.textContent).toEqual("false");
 
-    const button = container.querySelector("button");
-    if (button !== null) button.click();
+    // simulating login
+    const loginBtn = container.getByTestId("loginBtn");
+    if (loginBtn !== null) loginBtn.click();
 
-    const divAfterClick = container.querySelector("p[data-testid='value']");
-    if (divAfterClick !== null)
-      expect(divAfterClick.textContent).toEqual("true");
+    if (div !== null) expect(div.textContent).toEqual("true");
 
+    // simulating logout
+    const logoutBtn = container.getByTestId("logoutBtn");
+    if (logoutBtn !== null) logoutBtn.click();
+
+    expect(div.textContent).toEqual("false");
+
+    const { unmount } = container;
     unmount();
   });
 });
