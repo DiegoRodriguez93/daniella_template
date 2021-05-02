@@ -5,3 +5,19 @@ export const getProducts: () => Promise<object> = () => {
 
   return fetch(URL).then((res) => res.json());
 };
+
+export const uploadProduct = async (data: Array<string>) => {
+  const URL: string = `${API_URL}/upload-product`;
+  const formData = new FormData();
+
+  for (const name in data) {
+    formData.append(name, data[name]);
+  }
+
+  const response = await fetch(URL, {
+    method: "POST",
+    body: formData,
+  });
+
+  return response;
+};

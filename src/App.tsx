@@ -1,20 +1,22 @@
 import React from "react";
-
 import { ThemeProvider } from "@material-ui/core";
 import { theme /* , darkTheme */ } from "./styles/theme";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter } from "react-router-dom";
+import Router from "./components/Router";
 
-import Home from "./containers/Home";
 
 const App = () => {
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <Home />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <Router />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   );
 };
 
