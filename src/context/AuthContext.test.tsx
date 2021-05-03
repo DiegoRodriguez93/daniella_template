@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { /* prettyDOM, */ fireEvent, render } from "@testing-library/react";
 import { AuthContext, AuthProvider } from "./AuthContext";
 
 describe("login & logout test (AuthContext)", () => {
@@ -31,16 +31,18 @@ describe("login & logout test (AuthContext)", () => {
     if (div !== null) expect(div.textContent).toEqual("false");
 
     // simulating login
-    const loginBtn = container.getByTestId("loginBtn");
-    if (loginBtn !== null) loginBtn.click();
+    const loginBtn = container.getByText("Login");
+    fireEvent.click(loginBtn)
 
     if (div !== null) expect(div.textContent).toEqual("true");
 
     // simulating logout
-    const logoutBtn = container.getByTestId("logoutBtn");
-    if (logoutBtn !== null) logoutBtn.click();
+    const logoutBtn = container.getByText("Logout");
+    fireEvent.click(logoutBtn)
 
     expect(div.textContent).toEqual("false");
+
+    // console.log(prettyDOM(div)); to display the DOM in the console
 
     const { unmount } = container;
     unmount();

@@ -9,33 +9,40 @@ import {
   FormLabel,
   Input,
 } from "@material-ui/core";
+import { uploadProduct } from "../../libs/api";
 
-/* interface Values {
-  email: string;
-  password: string;
+/* interface ValuesInterface {
+  name: string;
+  price: string;
+  img1: any;
+  img2: any;
 } */
 
 const validationSchema = yup.object({
-  email: yup
+  name: yup
     .string()
-    .email("Enter a valid email")
-    .required("Email is required"),
-  password: yup
+    .min(2, "Nombre debe tener al menos 2 carecteres")
+    .required("Nombre es requerido"),
+  price: yup
     .string()
-    .min(8, "Password should be of minimum 8 characters length")
-    .required("Password is required"),
+    .min(1, "Debe tener un valor de al menos 1 peso")
+    .required("Precio es requerido"),
 });
 
 const UploadProductoForm = () => {
   const formik = useFormik({
     initialValues: {
-      email: "foobar@example.com",
-      password: "foobar",
-      img1: {},
+      name: "",
+      price: "100",
+      img1: "",
+      img2: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      console.log(values);
+      /* return false; */
+      console.info(uploadProduct(values));
+      //alert(JSON.stringify(values, null, 2));
     },
   });
 
@@ -46,34 +53,46 @@ const UploadProductoForm = () => {
           <form onSubmit={formik.handleSubmit}>
             <TextField
               fullWidth
-              id="email"
-              name="email"
-              label="Email"
-              value={formik.values.email}
+              id="name"
+              name="name"
+              label="Nombre"
+              value={formik.values.name}
               onChange={formik.handleChange}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
             />
             <TextField
               fullWidth
-              id="password"
-              name="password"
-              label="Password"
-              type="password"
-              value={formik.values.password}
+              id="price"
+              name="price"
+              label="Price"
+              value={formik.values.price}
               onChange={formik.handleChange}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
+              error={formik.touched.price && Boolean(formik.errors.price)}
+              helperText={formik.touched.price && formik.errors.price}
             />
 
-            <FormLabel htmlFor="img1">File upload</FormLabel>
+            <FormLabel htmlFor="img1">Image 1 upload</FormLabel>
             <Input
               id="img1"
               name="img1"
               type="file"
               style={{ marginBottom: "40px" }}
-              value={formik.values.img1}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.setFieldValue("img1", e.target);
+              }}
+              className="form-control"
+            />
+
+            <FormLabel htmlFor="img2">Image 2 upload</FormLabel>
+            <Input
+              id="img2"
+              name="img2"
+              type="file"
+              style={{ marginBottom: "40px" }}
+              onChange={(e) => {
+                formik.setFieldValue("img2", e.target);
+              }}
               className="form-control"
             />
             {/* <Thumb file={values.file} /> */}
