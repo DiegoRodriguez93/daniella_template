@@ -10,6 +10,7 @@ import {
   Input,
 } from "@material-ui/core";
 import { uploadProduct } from "../../libs/api";
+import Swal from "sweetalert2";
 
 /* interface ValuesInterface {
   name: string;
@@ -39,10 +40,17 @@ const UploadProductoForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      /* return false; */
-      console.info(uploadProduct(values));
-      //alert(JSON.stringify(values, null, 2));
+      uploadProduct(values)
+        .then((r) =>
+          Swal.fire("Correcto!", "Producto guardado correctamente", "success")
+        )
+        .catch((err) =>
+          Swal.fire(
+            "Error!",
+            "Ha ocurrido un error, intente más tarde!",
+            "error"
+          )
+        );
     },
   });
 

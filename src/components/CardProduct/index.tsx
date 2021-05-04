@@ -14,7 +14,7 @@ interface ProductDataInterface {
   img1: string;
   img2: string;
   name: string;
-  id: object;
+  id: string;
   price: number;
 }
 
@@ -24,14 +24,15 @@ interface CardProductInterface {
 
 export default function CardProduct(props: CardProductInterface) {
   const classes = useStyles();
-  const { img1, img2, name, /* id, */ price } = props.productData;
-  const [image, setImage] = useState(img1);
+  const imageServer = process.env.REACT_APP_API_URL;
+  const { img1, img2, name,  id, price } = props.productData;
+  const [image, setImage] = useState(imageServer + img1);
 
   const changeImageHover = (image: string) => {
-    if (image === img1) {
-      setImage(img2);
+    if (image === imageServer + img1) {
+      setImage(imageServer + img2);
     } else {
-      setImage(img1);
+      setImage(imageServer + img1);
     }
   };
 
@@ -57,7 +58,7 @@ export default function CardProduct(props: CardProductInterface) {
       <CardActions className={classes.actions}>
         <Typography variant="h5">${price}</Typography>
         <Button
-          onClick={() => console.log("comprar producto con id:")}
+          onClick={() => console.log("comprar producto con id:" + id)}
           variant="contained"
           color="primary"
         >
